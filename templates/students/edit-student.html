@@ -98,7 +98,16 @@
                                     <div class="form-group">
                                         <label>Student Image</label>
                                         <input type="file" name="student_image" class="form-control">
-                                        <small>Current Image: {{ student.student_image.url }}</small>
+                                        <div class="form-group">
+                                           <label>Student Image</label>
+                                            <input type="file" name="student_image" class="form-control">
+    
+                                            {% if student.student_image %}
+                                                <small>Current Image: <a href="{{ student.student_image.url }}" target="_blank">{{ student.student_image.name }}</a></small>
+                                            {% else %}
+                                                <small class="text-muted">No image currently uploaded.</small>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-12">

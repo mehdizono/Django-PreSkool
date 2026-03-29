@@ -24,7 +24,11 @@
 <div class="about-info">
 <h4>About Me</h4>
 <div class="media mt-3">
-<img src="{{student.student_image.url}}" class="mr-3" alt="...">
+{% if student.student_image %}
+    <img src="{{ student.student_image.url }}" class="mr-3" width="100" alt="Student Image">
+{% else %}
+    <img src="{% static 'assets/img/profiles/avatar-01.jpg' %}" class="mr-3" width="100" alt="Default Avatar">
+{% endif %}
 <div class="media-body">
 <ul>
 <li>
