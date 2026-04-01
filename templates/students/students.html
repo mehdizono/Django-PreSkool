@@ -51,7 +51,7 @@
                                                     {% endif %}
                                                 </a>
                                                 <a href="{% url 'view_student' student.student_id %}">{{ student.first_name }} {{ student.last_name}}</a>
-                                            </h2>
+                                            /h2>
                                         </td>
                                         <td>{{ student.student_class }}</td>
                                         <td>{{ student.date_of_birth|date:"d M Y" }}</td>
@@ -59,7 +59,7 @@
                                             {% if student.parent %}
                                                 {{ student.parent.father_name }} / {{ student.parent.mother_name }}
                                             {% else %}
-                                                N/A
+                                                 N/A
                                             {% endif %}
                                         </td>
                                         <td>{{ student.mobile_number }}</td>
@@ -81,10 +81,6 @@
                                                 </form>
                                             </div>
                                         </td>
-                                    </tr>
-                                    {% empty %}
-                                    <tr>
-                                        <td colspan="8" class="text-center">No students found in the database.</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>

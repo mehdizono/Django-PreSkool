@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mt-5">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="card-title mb-0 text-white">Confirm Deletion</h4>
+                </div>
+                <div class="card-body text-center mt-4">
+                    <h5 class="mb-4">Are you sure you want to delete the teacher <strong>{{ teacher.user.first_name }} {{ teacher.user.last_name }}</strong>?</h5>
+                    <p class="text-muted">This action cannot be undone.</p>
+                    
+                    <form method="POST" class="mt-4">
+                        {% csrf_token %}
+                        <a href="{% url 'teacher_list' %}" class="btn btn-secondary mr-2">Cancel</a>
+                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

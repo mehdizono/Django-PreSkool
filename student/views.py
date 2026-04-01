@@ -1,5 +1,6 @@
 from urllib import request
 from django.contrib import messages
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render, redirect
 
 import student
@@ -146,10 +147,13 @@ def view_student(request, student_id):
     return render(request, 'students/student-details.html', context)
     return render(request, 'students/student-details.html')
 
-def delete_student(request, slug):
+def delete_student(request, student_id):
     if request.method == 'POST':
-        student = get_object_or_404(Student, slug=slug)
-        Student.name = f"{student.first_name} {student.last_name}"
+        # Notice the change here: student_id=student_id 
+        # (The left side is your model field, the right side is the URL variable)
+        student = get_object_or_404(Student, student_id=student_id)
+        
         student.delete()
-    return redirect('student_list')
+        return redirect('student_list')
+        
     return HttpResponseForbidden()

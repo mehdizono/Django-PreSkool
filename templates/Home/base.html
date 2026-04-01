@@ -90,8 +90,8 @@
                      </div>
                      <a class="dropdown-item" href="profile.html">My Profile</a>
                      <a class="dropdown-item" href="inbox.html">Inbox</a>
-                  
-                </div>
+                     <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                  </div>
                </li>
             </ul>
          </div>
@@ -182,8 +182,9 @@
                      <li class="submenu">
                         <a href="#"><i class="fas fa-shield-alt"></i> <span> Authentication </span> <span class="menu-arrow"></span></a>
                         <ul>
-
-
+                           <li><a href="{% url 'login' %}">Login</a></li>
+                           <li><a href="{% url 'signup' %}">Register</a></li>
+                           <li><a href="{% url 'forgot-password' %}">Forgot Password</a></li>
                            <li><a href="error-404.html">Error Page</a></li>
                         </ul>
                      </li>
@@ -272,7 +273,7 @@
               if (notiDropdown) {
                   // Add a click event listener to the notification dropdown
                   notiDropdown.addEventListener('click', function() {
-
+                      const url = "{% url 'mark_notifications_as_read' %}";
       
                       // Use the Fetch API to send a POST request to mark notifications as read
                       fetch(url, {
@@ -301,7 +302,7 @@
               if (clearAllBtn) {
                   // Add a click event listener to the "Clear All" button
                   clearAllBtn.addEventListener('click', function() {
-
+                      const clearUrl = "{% url 'clear_all_notifications' %}";  // Ensure this URL points to the correct view
       
                       // Use Fetch to send a POST request to clear all notifications
                       fetch(clearUrl, {
