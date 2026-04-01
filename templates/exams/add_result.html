@@ -1,0 +1,91 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+{% block body %}
+<div class="page-wrapper">
+  <div class="content container-fluid">
+    <div class="page-header">
+      <div class="row align-items-center">
+        <div class="col">
+          <h3 class="page-title">Saisir une Note</h3>
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'result_list' %}">Résultats</a></li>
+            <li class="breadcrumb-item active">Ajouter</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-body">
+            <form method="POST">
+              {% csrf_token %}
+              <div class="row">
+                
+                <!-- Choix de l'Examen -->
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <label>Examen</label>
+                    <select name="exam" class="form-control" required>
+                      <option value="">-- Sélectionnez l'examen --</option>
+                      {% for exam in exams %}
+                        <option value="{{ exam.id }}">{{ exam.exam_name }} ({{ exam.subject.name }})</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Choix de l'Étudiant -->
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <label>Étudiant</label>
+                    <select name="student" class="form-control" required>
+                      <option value="">-- Sélectionnez l'étudiant --</option>
+                      {% for student in students %}
+                        <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Note Obtenue -->
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <label>Note obtenue</label>
+                    <input type="number" step="0.01" name="marks" class="form-control" placeholder="ex: 14.5" required>
+                  </div>
+                </div>
+
+                <!-- Note Sur (Barème) -->
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <label>Note sur (Barème)</label>
+                    <input type="number" step="0.01" name="total_marks" class="form-control" value="20.00" required>
+                  </div>
+                </div>
+
+                <!-- Appréciation (Commentaires) -->
+                <div class="col-12">
+                  <div class="form-group">
+                    <label>Appréciation (Commentaire)</label>
+                    <textarea name="comments" class="form-control" rows="3" placeholder="Ex: Très bon travail..."></textarea>
+                  </div>
+                </div>
+
+                <!-- Boutons -->
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Enregistrer la note</button>
+                  <a href="{% url 'result_list' %}" class="btn btn-secondary ml-2">Annuler</a>
+                </div>
+
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+p

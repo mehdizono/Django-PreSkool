@@ -1,0 +1,97 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+{% block body %}
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Ajouter un Créneau</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'timetable' %}">Emploi du Temps</a></li>
+                        <li class="breadcrumb-item active">Ajouter</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5 class="form-title"><span>Détails du créneau</span></h5>
+                                </div>
+                                
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Matière</label>
+                                        <select name="subject" class="form-control" required>
+                                            <option value="">-- Choisir une matière --</option>
+                                            {% for subject in subjects %}
+                                            <option value="{{ subject.id }}">{{ subject.name }} ({{ subject.code }})</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Enseignant</label>
+                                        <select name="teacher" class="form-control" required>
+                                            <option value="">-- Choisir un enseignant --</option>
+                                            {% for teacher in teachers %}
+                                            <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Jour</label>
+                                        <select name="day" class="form-control" required>
+                                            {% for day_val, day_name in days %}
+                                            <option value="{{ day_val }}">{{ day_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Salle</label>
+                                        <input type="text" name="room" class="form-control" placeholder="Ex: Salle 201">
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Heure de début</label>
+                                        <input type="time" name="start_time" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Heure de fin</label>
+                                        <input type="time" name="end_time" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mt-3 text-right">
+                                    <a href="{% url 'timetable' %}" class="btn btn-secondary mr-2">Annuler</a>
+                                    <button type="submit" class="btn btn-primary">Enregistrer le créneau</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

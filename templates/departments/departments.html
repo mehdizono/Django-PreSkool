@@ -1,0 +1,80 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+{% block body %}
+<div class="page-wrapper">
+  <div class="content container-fluid">
+    <div class="page-header">
+      <div class="row align-items-center">
+        <div class="col">
+          <h3 class="page-title">Départements</h3>
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/dashboard/">Dashboard</a></li>
+            <li class="breadcrumb-item active">Départements</li>
+          </ul>
+        </div>
+        <div class="col-auto text-right float-right ml-auto">
+          <a href="{% url 'add_department' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Ajouter
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card card-table">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover table-center mb-0 datatable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nom du département</th>
+                    <th>Responsable</th>
+                    <th>Nb. Enseignants</th>
+                    <th>Description</th>
+                    <th class="text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for dept in departments %}
+                  <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ dept.name }}</td>
+                    <td>{{ dept.head_teacher|default:"-" }}</td>
+                    <td>{{ dept.teachers.count }}</td>
+                    <td>{{ dept.description|default:"-" }}</td>
+                    <td class="text-right">
+                      <div class="actions">
+                        <a href="{% url 'edit_department' dept.pk %}" class="btn btn-sm bg-success-light mr-2">
+                          <i class="fas fa-pen"></i>
+                        </a>
+                        <form action="{% url 'delete_department' dept.pk %}" method="POST" style="display:inline;">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-sm bg-danger-light"
+                            onclick="return confirm('Supprimer ce département ?');">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                  {% empty %}
+                  <tr><td colspan="6" class="text-center">Aucun département trouvé.</td></tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

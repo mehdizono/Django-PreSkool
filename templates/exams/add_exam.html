@@ -1,0 +1,72 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+{% block body %}
+<div class="page-wrapper">
+  <div class="content container-fluid">
+    <div class="page-header">
+      <div class="row align-items-center">
+        <div class="col">
+          <h3 class="page-title">Planifier un Examen</h3>
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'exam_list' %}">Examens</a></li>
+            <li class="breadcrumb-item active">Ajouter</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-body">
+            <form method="POST">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <label>Nom de l'examen</label>
+                    <input type="text" name="exam_name" class="form-control" placeholder="Ex: Contrôle Continu 1" required>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <label>Matière</label>
+                    <select name="subject" class="form-control" required>
+                      <option value="">-- Sélectionnez une matière --</option>
+                      {% for subject in subjects %}
+                        <option value="{{ subject.id }}">{{ subject.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <div class="form-group">
+                    <label>Date de l'examen</label>
+                    <input type="date" name="exam_date" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <div class="form-group">
+                    <label>Heure de début</label>
+                    <input type="time" name="start_time" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <div class="form-group">
+                    <label>Heure de fin</label>
+                    <input type="time" name="end_time" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Planifier</button>
+                  <a href="{% url 'exam_list' %}" class="btn btn-secondary ml-2">Annuler</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="page-wrapper">
+<div class="content container-fluid">
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Modifier l'Enseignant</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST" action="{% url 'edit_teacher' teacher.teacher_id %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="form-title"><span>Détails de base</span></h5>
+                            </div>
+                            
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>ID Enseignant</label>
+                                    <input type="text" name="teacher_id" class="form-control" value="{{ teacher.teacher_id }}" readonly>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Prénom</label>
+                                    <input type="text" name="first_name" class="form-control" value="{{ teacher.first_name }}" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Nom</label>
+                                    <input type="text" name="last_name" class="form-control" value="{{ teacher.last_name }}" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Genre</label>
+                                    <select class="form-control" name="gender" required>
+                                        <option value="Male" {% if teacher.gender == 'Male' %}selected{% endif %}>Masculin</option>
+                                        <option value="Female" {% if teacher.gender == 'Female' %}selected{% endif %}>Féminin</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Date de Naissance</label>
+                                    <input type="date" name="date_of_birth" class="form-control" value="{{ teacher.date_of_birth|date:'Y-m-d' }}" required>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Date d'embauche</label>
+                                    <input type="date" name="joining_date" class="form-control" value="{{ teacher.joining_date|date:'Y-m-d' }}" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Téléphone</label>
+                                    <input type="text" name="mobile_number" class="form-control" value="{{ teacher.mobile_number }}">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Expérience</label>
+                                    <input type="text" name="experience" class="form-control" value="{{ teacher.experience }}">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-12">
+                                <div class="form-group">
+                                    <label>Adresse</label>
+                                    <textarea class="form-control" name="address">{{ teacher.address }}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Photo de profil (laisser vide pour conserver l'actuelle)</label>
+                                    <input type="file" name="image" class="form-control">
+                                    {% if teacher.image %}
+                                        <small class="text-muted">Image actuelle : {{ teacher.image.name }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

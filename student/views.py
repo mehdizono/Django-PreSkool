@@ -1,22 +1,25 @@
-from urllib import request
+from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.http import HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render, redirect
-
-import student
 from .models import Student, Parent
+from django.contrib.auth.decorators import login_required, user_passes_test
 
-# Create your views here.
+
+
+def is_admin(user):
+    return user.is_authenticated and getattr(user, 'is_admin', False)
+
+def is_teacher_or_admin(user):
+    return user.is_authenticated and (getattr(user, 'is_teacher', False) or getattr(user, 'is_admin', False))
+
+
 def student_list(request):
-    student_list = Student.objects.select_related('parent').all()
-    context = {
-        'student_list': student_list
-    }
-    return render(request, 'students/students.html', context)
+    students = Student.objects.all()
+    return render(request, 'students/students.html',{'student_list': students})
 
+@user_passes_test(is_admin)
 def add_student(request):
     if request.method == 'POST':
-        # Get all the text data
+        # Récupérer les données de l'étudiant
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         student_id = request.POST.get('student_id')
@@ -27,11 +30,9 @@ def add_student(request):
         mobile_number = request.POST.get('mobile_number')
         admission_number = request.POST.get('admission_number')
         section = request.POST.get('section')
-        
-        # Get the image file
         student_image = request.FILES.get('student_image')
 
-        # Get parent data
+        # Récupérer les données du parent
         father_name = request.POST.get('father_name')
         father_occupation = request.POST.get('father_occupation')
         father_mobile = request.POST.get('father_mobile')
@@ -43,7 +44,7 @@ def add_student(request):
         present_address = request.POST.get('present_address')
         permanent_address = request.POST.get('permanent_address')
 
-        # Save parent information
+        # 1. Créer et sauvegarder le parent
         parent = Parent.objects.create(
             father_name=father_name,
             father_occupation=father_occupation,
@@ -57,8 +58,8 @@ def add_student(request):
             permanent_address=permanent_address
         )
 
-        # Save student information
-        Student.objects.create(
+        # 2. Créer l'étudiant lié au parent
+        student = Student.objects.create(
             first_name=first_name,
             last_name=last_name,
             student_id=student_id,
@@ -70,90 +71,76 @@ def add_student(request):
             admission_number=admission_number,
             section=section,
             student_image=student_image,
-            parent=parent
+            parent=parent 
         )
-        
-        messages.success(request, 'Student added successfully!')
-        
-        # It's good practice to redirect after a successful POST to prevent duplicate submissions
-        return redirect('add_student') 
 
-    # If it's a GET request (meaning they just clicked the link to view the page), show the empty form
-    return render(request, 'students/add-student.html')
-
-
-def edit_student(request, student_id):
-    # 1. Grab the specific student and parent instances (lowercase)
-    student = get_object_or_404(Student, student_id=student_id)
-    parent = student.parent if hasattr(student, 'parent') else None
-
-    if request.method == 'POST':
-        # 2. Update Student fields (lowercase 'student', NO trailing commas!)
-        Student.first_name = request.POST.get('first_name')
-        Student.last_name = request.POST.get('last_name')
-        Student.student_id = request.POST.get('student_id')
-        Student.gender = request.POST.get('gender')
-        Student.date_of_birth = request.POST.get('date_of_birth')
-        Student.student_class = request.POST.get('student_class')
-        Student.joining_date = request.POST.get('joining_date')
-        Student.mobile_number = request.POST.get('mobile_number')
-        Student.admission_number = request.POST.get('admission_number')
-        Student.section = request.POST.get('section')
-        
-        # 3. Handle the image safely (only update if a new file was uploaded)
-        student_image = request.FILES.get('student_image')
-        if student_image:
-            student.student_image = student_image
-
-        # 4. Update Parent fields (lowercase 'parent')
-        if parent:
-            Parent.father_name = request.POST.get('father_name')
-            Parent.father_occupation = request.POST.get('father_occupation')
-            Parent.father_mobile = request.POST.get('father_mobile')
-            Parent.father_email = request.POST.get('father_email')
-            Parent.mother_name = request.POST.get('mother_name')
-            Parent.mother_occupation = request.POST.get('mother_occupation')
-            Parent.mother_mobile = request.POST.get('mother_mobile')
-            Parent.mother_email = request.POST.get('mother_email')
-            Parent.present_address = request.POST.get('present_address')
-            Parent.permanent_address = request.POST.get('permanent_address')
-            parent.save() # Save the parent instance
-
-        # 5. Save the student instance
-        student.save()
-
-        # Optional: Add a success message
-        messages.success(request, 'Student updated successfully!')
-        
-        # 6. Redirect to the list view instead of rendering just a string
-        return redirect("student_list")
-
-    # 7. If GET request, render the edit page and pass the variables (lowercase)
-    context = {
-        'student': student,
-        'parent': parent
-    }
-    return render(request, 'students/edit-student.html', context)
-def view_student(request, student_id):
-    # 1. Fetch the specific student from the database
-    student = get_object_or_404(Student, student_id=student_id)
-    
-    # 2. Put the student into the context dictionary
-    context = {
-        'student': student 
-    }
-    
-    # 3. Pass the context to the template
-    return render(request, 'students/student-details.html', context)
-    return render(request, 'students/student-details.html')
-
-def delete_student(request, student_id):
-    if request.method == 'POST':
-        # Notice the change here: student_id=student_id 
-        # (The left side is your model field, the right side is the URL variable)
-        student = get_object_or_404(Student, student_id=student_id)
-        
-        student.delete()
+        # 3. Afficher message et rediriger vers la liste
+        messages.success(request, 'Student added Successfully')
         return redirect('student_list')
         
-    return HttpResponseForbidden()
+    else:
+        return render(request, 'students/add-student.html')
+
+# --- Les autres fonctions CRUD ---
+@user_passes_test(is_admin)
+def edit_student(request, student_id):
+    student = Student.objects.filter(student_id=student_id).first()
+    if not student:
+        messages.error(request, 'Student not found')
+        return redirect('student_list')
+    parent = student.parent
+
+    if request.method == 'POST':
+        student.first_name = request.POST.get('first_name')
+        student.last_name = request.POST.get('last_name')
+        student.gender = request.POST.get('gender')
+        student.date_of_birth = request.POST.get('date_of_birth')
+        student.student_class = request.POST.get('student_class')
+        student.joining_date = request.POST.get('joining_date')
+        student.mobile_number = request.POST.get('mobile_number')
+        student.admission_number = request.POST.get('admission_number')
+        student.section = request.POST.get('section')
+        if request.FILES.get('student_image'):
+            student.student_image = request.FILES.get('student_image')
+        student.save()
+
+        parent.father_name = request.POST.get('father_name')
+        parent.father_occupation = request.POST.get('father_occupation')
+        parent.father_mobile = request.POST.get('father_mobile')
+        parent.father_email = request.POST.get('father_email')
+        parent.mother_name = request.POST.get('mother_name')
+        parent.mother_occupation = request.POST.get('mother_occupation')
+        parent.mother_mobile = request.POST.get('mother_mobile')
+        parent.mother_email = request.POST.get('mother_email')
+        parent.present_address = request.POST.get('present_address')
+        parent.permanent_address = request.POST.get('permanent_address')
+        parent.save()
+
+        messages.success(request, 'Student updated successfully')
+        return redirect('student_list')
+    
+    return render(request, 'students/edit-student.html', {'student': student, 'parent': parent})
+
+
+def view_student(request, student_id):
+    student = Student.objects.filter(student_id=student_id).first()
+    if not student:
+        messages.error(request, 'Student not found')
+        return redirect('student_list')
+    return render(request, 'students/student-details.html', {'student': student})
+
+@user_passes_test(is_admin)
+def delete_student(request, student_id):
+    student = Student.objects.filter(student_id=student_id).first()
+    if not student:
+        messages.error(request, 'Student not found')
+        return redirect('student_list')
+    
+    # Supprimer le parent supprime aussi l'étudiant grâce au "on_delete=models.CASCADE"
+    if hasattr(student, 'parent') and student.parent:
+        student.parent.delete()
+    else:
+        student.delete()
+        
+    messages.success(request, 'Student deleted successfully')
+    return redirect('student_list')

@@ -1,0 +1,71 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+{% block body %}
+<div class="page-wrapper">
+  <div class="content container-fluid">
+    <div class="page-header">
+      <div class="row align-items-center">
+        <div class="col">
+          <h3 class="page-title">Ajouter un Département</h3>
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'department_list' %}">Départements</a></li>
+            <li class="breadcrumb-item active">Ajouter</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-body">
+            <form method="POST">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <label>Nom du département</label>
+                    <input type="text" name="name" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <label>Responsable (Enseignant)</label>
+                    <select name="head_teacher" class="form-control">
+                      <option value="">-- Sélectionner --</option>
+                      {% for teacher in teachers %}
+                        <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" class="form-control" rows="3"></textarea>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label>Enseignants du département</label>
+                    <select name="teachers" class="form-control" multiple size="6">
+                      {% for teacher in teachers %}
+                        <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
+                      {% endfor %}
+                    </select>
+                    <small class="text-muted">Maintenez Ctrl (ou Cmd) pour sélectionner plusieurs enseignants.</small>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Enregistrer</button>
+                  <a href="{% url 'department_list' %}" class="btn btn-secondary ml-2">Annuler</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

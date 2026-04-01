@@ -10,10 +10,20 @@
 <div class="page-header">
 <div class="row">
 <div class="col-sm-12">
-<h3 class="page-title">Welcome {{ user.first_name }}!</h3>
+<h3 class="page-title">Welcome {{ request.user.first_name|default:request.user.username }}!</h3>
 <ul class="breadcrumb">
-<li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-<li class="breadcrumb-item active">Student Dashboard</li>
+<li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+<li class="breadcrumb-item active">
+{% if request.user.is_admin %}
+    Admin Dashboard
+{% elif request.user.is_teacher %}
+    Teacher Dashboard
+{% elif request.user.is_student %}
+    Student Dashboard
+{% else %}
+    Dashboard
+{% endif %}
+</li>
 </ul>
 </div>
 </div>
@@ -261,26 +271,5 @@
 
 </div>
 
-
-<script src="{%static 'assets/js/jquery-3.6.0.min.js' %}"></script>
-
-<script src="{%static 'assets/js/popper.min.js' %}"></script>
-<script src="{%static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
-
-<script src="{%static 'assets/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
-
-<script src="{%static 'assets/plugins/apexchart/apexcharts.min.js' %}"></script>
-<script src="{%static 'assets/plugins/apexchart/chart-data.js' %}"></script>
-
-<script src="{%static 'assets/plugins/simple-calendar/jquery.simple-calendar.js' %}"></script>
-<script src="{%static 'assets/js/calander.js' %}"></script>
-
-<script src="{%static 'assets/js/circle-progress.min.js' %}"></script>
-
-<script src="{%static 'assets/js/script.js' %}"></script>
-</body>
-
-<!-- Mirrored from preschool.dreamguystech.com/html-template/student-dashboard.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Oct 2021 11:11:43 GMT -->
-</html>
 
 {% endblock %}

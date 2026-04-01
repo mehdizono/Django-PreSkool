@@ -1,0 +1,96 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+{% block body %}
+<div class="page-wrapper">
+  <div class="content container-fluid">
+    <div class="page-header">
+      <div class="row align-items-center">
+        <div class="col">
+          <h3 class="page-title">Modifier la Matière</h3>
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'subject_list' %}">Matières</a></li>
+            <li class="breadcrumb-item active">Modifier</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-body">
+            <form method="POST">
+              {% csrf_token %}
+              <div class="row">
+
+                <!-- Code de la matière -->
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <label>Code de la matière</label>
+                    <input type="text" name="code" class="form-control" value="{{ subject.code }}" required>
+                  </div>
+                </div>
+
+                <!-- Nom de la matière -->
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <label>Nom de la matière</label>
+                    <input type="text" name="name" class="form-control" value="{{ subject.name }}" required>
+                  </div>
+                </div>
+
+                <!-- Département -->
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <label>Département</label>
+                    <select name="department" class="form-control">
+                      <option value="">-- Sélectionner un département --</option>
+                      {% for dept in departments %}
+                        <option value="{{ dept.id }}"
+                          {% if subject.department and subject.department.id == dept.id %}selected{% endif %}>
+                          {{ dept.name }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Enseignant -->
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                    <label>Enseignant</label>
+                    <select name="teacher" class="form-control">
+                      <option value="">-- Sélectionner un enseignant --</option>
+                      {% for teacher in teachers %}
+                        <option value="{{ teacher.id }}"
+                          {% if subject.teacher and subject.teacher.id == teacher.id %}selected{% endif %}>
+                          {{ teacher.first_name }} {{ teacher.last_name }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Description -->
+                <div class="col-12">
+                  <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" class="form-control" rows="3">{{ subject.description }}</textarea>
+                  </div>
+                </div>
+
+                <!-- Boutons -->
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                  <a href="{% url 'subject_list' %}" class="btn btn-secondary ml-2">Annuler</a>
+                </div>
+
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

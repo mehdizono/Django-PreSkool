@@ -1,0 +1,73 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+{% block body %}
+<div class="page-wrapper">
+  <div class="content container-fluid">
+    <div class="page-header">
+      <div class="row align-items-center">
+        <div class="col">
+          <h3 class="page-title">Résultats des Examens</h3>
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/dashboard/">Dashboard</a></li>
+            <li class="breadcrumb-item active">Résultats</li>
+          </ul>
+        </div>
+        <div class="col-auto text-right float-right ml-auto">
+          <a href="{% url 'add_result' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Saisir une note
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card card-table">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover table-center mb-0 datatable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Étudiant</th>
+                    <th>Examen</th>
+                    <th>Matière</th>
+                    <th>Note Obtenue</th>
+                    <th>Appréciation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for result in results %}
+                  <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                      <h2 class="table-avatar">
+                        <a href="#">{{ result.student.first_name }} {{ result.student.last_name }}</a>
+                      </h2>
+                    </td>
+                    <td>{{ result.exam.exam_name }}</td>
+                    <td>{{ result.exam.subject.name }}</td>
+                    <td>
+                      <strong>{{ result.marks_obtained }}</strong> / {{ result.total_marks }}
+                    </td>
+                    <td>{{ result.comments|default:"-" }}</td>
+                  </tr>
+                  {% empty %}
+                  <tr><td colspan="6" class="text-center">Aucun résultat enregistré.</td></tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

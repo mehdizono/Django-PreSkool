@@ -186,14 +186,9 @@ Version      : 1.0
 			$('body').addClass('mini-sidebar');
 			$('.subdrop + ul').slideUp();
 		}
-		setTimeout(function(){ 
-			mA.redraw();
-			mL.redraw();
-		}, 300);
 		return false;
 	});
 	$(document).on('mouseover', function(e) {
-		e.stopPropagation();
 		if($('body').hasClass('mini-sidebar') && $('#toggle_btn').is(':visible')) {
 			var targ = $(e.target).closest('.sidebar').length;
 			if(targ) {
@@ -203,7 +198,6 @@ Version      : 1.0
 				$('body').removeClass('expand-menu');
 				$('.subdrop + ul').slideUp();
 			}
-			return false;
 		}
 	});
 

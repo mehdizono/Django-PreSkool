@@ -1,0 +1,45 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="page-wrapper">
+<div class="content container-fluid">
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="page-title">Détails de l'enseignant</h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="about-info">
+                        <h4>Profil de : {{ teacher.first_name }} {{ teacher.last_name }}</h4>
+                        
+                        <div class="media mt-3">
+                            {% if teacher.image %}
+                                <img src="{{ teacher.image.url }}" class="mr-3 rounded-circle" alt="..." width="100">
+                            {% endif %}
+                            <div class="media-body">
+                                <ul>
+                                    <li><strong>ID :</strong> {{ teacher.teacher_id }}</li>
+                                    <li><strong>Sexe :</strong> {{ teacher.gender }}</li>
+                                    <li><strong>Téléphone :</strong> {{ teacher.mobile_number }}</li>
+                                    <li><strong>Date d'embauche :</strong> {{ teacher.joining_date }}</li>
+                                    <li><strong>Expérience :</strong> {{ teacher.experience }}</li>
+                                    <li><strong>Adresse :</strong> {{ teacher.address }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

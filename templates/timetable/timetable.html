@@ -1,0 +1,91 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+{% block body %}
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Emploi du Temps</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Emploi du Temps</li>
+                    </ul>
+                </div>
+                {% if request.user.is_admin or request.user.is_teacher %}
+                <div class="col-auto text-right float-right ml-auto">
+                    <a href="{% url 'add_timetable' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter un créneau</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Planning Hebdomadaire</h5>
+                        <p class="text-muted mb-0">Tous les cours programmés pour la semaine.</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-center mb-0">
+                                <thead class="thead-light text-center">
+                                    <tr>
+                                        {% for i, name in days_names.items %}
+                                        <th style="width: 16.66%;">{{ name }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        {% for day_index, entries in timetable_data.items %}
+                                        <td style="vertical-align: top; background-color: #fdfdfd;">
+                                            {% if entries %}
+                                                {% for entry in entries %}
+                                                <div class="timetable-slot shadow-sm p-2 mb-2 position-relative" style="background-color: #ffffff; border-left: 4px solid #18aefa; border-radius: 4px; border-top: 1px solid #eee; border-bottom: 1px solid #eee; border-right: 1px solid #eee;">
+                                                    {% if request.user.is_admin or request.user.is_teacher %}
+                                                    <a href="{% url 'delete_timetable' entry.pk %}" class="text-danger position-absolute" style="top: 5px; right: 8px;" onclick="return confirm('Voulez-vous vraiment supprimer ce créneau ?')">
+                                                        <i class="fas fa-times-circle"></i>
+                                                    </a>
+                                                    {% endif %}
+                                                    <h6 class="mb-1 text-primary pr-3" style="font-weight: 600; font-size: 0.9rem;">{{ entry.subject.name }}</h6>
+                                                    <div class="d-flex flex-column gap-1">
+                                                        <span class="mb-1 text-muted small"><i class="far fa-clock"></i> {{ entry.start_time|time:"H:i" }} - {{ entry.end_time|time:"H:i" }}</span>
+                                                        <span class="mb-1 small"><i class="fas fa-user-tie"></i> {{ entry.teacher.first_name }} {{ entry.teacher.last_name }}</span>
+                                                        {% if entry.room %}
+                                                        <span class="badge badge-soft-info" style="background-color: #e3f2fd; color: #0d47a1; font-size: 0.75rem;">Salle: {{ entry.room }}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            {% else %}
+                                                <div class="text-center py-4">
+                                                    <p class="text-muted small mb-0"><em>Pas de cours</em></p>
+                                                </div>
+                                            {% endif %}
+                                        </td>
+                                        {% endfor %}
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

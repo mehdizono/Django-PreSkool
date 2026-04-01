@@ -1,0 +1,67 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+{% block body %}
+<div class="page-wrapper">
+  <div class="content container-fluid">
+    <div class="page-header">
+      <div class="row align-items-center">
+        <div class="col">
+          <h3 class="page-title">Planification des Examens</h3>
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/dashboard/">Dashboard</a></li>
+            <li class="breadcrumb-item active">Examens</li>
+          </ul>
+        </div>
+        <div class="col-auto text-right float-right ml-auto">
+          <a href="{% url 'add_exam' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Planifier un examen
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card card-table">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover table-center mb-0 datatable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nom de l'examen</th>
+                    <th>Matière</th>
+                    <th>Date</th>
+                    <th>Heure de début</th>
+                    <th>Heure de fin</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for exam in exams %}
+                  <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ exam.exam_name }}</td>
+                    <td>{{ exam.subject.name }}</td>
+                    <td>{{ exam.exam_date|date:"d M Y" }}</td>
+                    <td>{{ exam.start_time|time:"H:i" }}</td>
+                    <td>{{ exam.end_time|time:"H:i" }}</td>
+                  </tr>
+                  {% empty %}
+                  <tr><td colspan="6" class="text-center">Aucun examen planifié.</td></tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="page-wrapper">
+<div class="content container-fluid">
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Enseignants</h3>
+            </div>
+            <div class="col-auto text-right float-right ml-auto">
+                <a href="{% url 'add_teacher' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter</a>
+            </div>
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-table">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-center mb-0 datatable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom Complet</th>
+                                    <th>Genre</th>
+                                    <th>Téléphone</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for teacher in teachers %}
+                                <tr>
+                                    <td>{{ teacher.teacher_id }}</td>
+                                    <td>
+                                        <h2 class="table-avatar">
+                                            <a href="{% url 'view_teacher' teacher.teacher_id %}">
+                                                {% if teacher.image %}
+                                                    <img class="avatar-img rounded-circle" src="{{ teacher.image.url }}" alt="Photo">
+                                                {% else %}
+                                                    <img class="avatar-img rounded-circle" src="{% static 'assets/img/profiles/avatar-02.jpg' %}" alt="Photo par défaut">
+                                                {% endif %}
+                                                {{ teacher.first_name }} {{ teacher.last_name }}
+                                            </a>
+                                        </h2>
+                                    </td>
+                                    <td>{{ teacher.gender }}</td>
+                                    <td>{{ teacher.mobile_number }}</td>
+                                    <td class="text-right">
+                                        <div class="actions">
+                                            <a href="{% url 'edit_teacher' teacher.teacher_id %}" class="btn btn-sm bg-success-light mr-2">
+                                                <i class="fas fa-pen"></i>
+                                            </a>
+                                            <a href="{% url 'delete_teacher' teacher.teacher_id %}" class="btn btn-sm bg-danger-light">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
