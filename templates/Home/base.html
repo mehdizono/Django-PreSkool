@@ -129,12 +129,14 @@
                         </ul>
                      </li>
                      <li class="submenu">
-                        <a href="#"><i class="fas fa-building"></i> <span> Departments</span> <span class="menu-arrow"></span></a>
-                        <ul>
-                           <li><a href="departments.html">Department List</a></li>
-                           <li><a href="add-department.html">Department Add</a></li>
-                           <li><a href="edit-department.html">Department Edit</a></li>
-                        </ul>
+                         <a href="#"><i class="fas fa-building"></i> <span> Departments</span> <span class="menu-arrow"></span></a>
+                         <ul>
+                             <li><a href="{% url 'department_list' %}">Department List</a></li>
+        
+                             <li><a href="{% url 'add_department' %}">Department Add</a></li>
+        
+                             <li><a href="#">Department Edit</a></li>
+                         </ul>
                      </li>
                      <li class="submenu">
                         <a href="#"><i class="fas fa-book-reader"></i> <span> Subjects</span> <span class="menu-arrow"></span></a>
@@ -159,7 +161,7 @@
                         </ul>
                      </li>
                      <li>
-                        <a href="holiday.html"><i class="fas fa-holly-berry"></i> <span>Holiday</span></a>
+                        <a href="{% url 'holidays' %}"><i class="fas fa-holidays"></i> <span> Holiday</span></a>
                      </li>
                      <li>
                         <a href="fees.html"><i class="fas fa-comment-dollar"></i> <span>Fees</span></a>
@@ -263,7 +265,10 @@
 
  
 
-    
+      <script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
+      <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+      <script src="{% static 'assets/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+      <script src="{% static 'assets/js/script.js' %}"></script>
       <script type="text/javascript">
           document.addEventListener('DOMContentLoaded', function() {
               // Select the notification dropdown element
