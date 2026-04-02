@@ -31,6 +31,25 @@
          .menu-title span { color: #64748b !important; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
          .page-wrapper { padding: 25px; transition: all 0.2s ease-in-out; }
          .user-img img { border: 2px solid #e2e8f0; }
+         /* Rend la sidebar flexible sur toute la hauteur de l'écran */
+         .sidebar-inner {
+            display: flex !important;
+            flex-direction: column !important;
+            height: calc(100vh - 60px) !important; /* Hauteur totale moins le header */
+         }
+
+/* Le menu principal devient la zone de défilement (scroll) */
+         #sidebar-menu {
+            flex: 1;
+            overflow-y: auto; /* Seul le menu défile si la liste est longue */
+         }
+
+/* Le bloc logout reste fixé en bas, ne bouge jamais */
+         .sidebar-logout-container {
+                     padding: 10px 0 20px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--sidebar-bg); /* Garde la même couleur de fond */
+         }
       </style>
    </head>
 
@@ -98,13 +117,16 @@
          <!-- HEADER END -->
 
          <!-- SIDEBAR START -->
+         <!-- SIDEBAR START -->
          <div class="sidebar" id="sidebar">
             <div class="sidebar-inner slimscroll">
+      
+      <!-- ZONE 1 : LE MENU (qui peut défiler) -->
                <div id="sidebar-menu" class="sidebar-menu">
-                  <ul>
+                 <ul>
                      <li class="menu-title"><span>Main</span></li>
                      <li>
-                        <a href="{% url 'dashboard' %}"><i class="fas fa-th-large"></i> <span>Dashboard</span></a>
+               <a href="{% url 'dashboard' %}"><i class="fas fa-th-large"></i> <span>Dashboard</span></a>
                      </li>
 
                      <li class="menu-title"><span>Management</span></li>
@@ -126,7 +148,7 @@
                      </li>
                      <li class="submenu">
                         <a href="#"><i class="fas fa-building"></i> <span> Departments</span> <span class="menu-arrow"></span></a>
-                        <ul>
+                       <ul>
                            <li><a href="{% url 'department_list' %}">Department List</a></li>
                            <li><a href="{% url 'add_department' %}">Add Department</a></li>
                         </ul>
@@ -145,8 +167,7 @@
                         <a href="#"><i class="fas fa-file-signature"></i> <span> Exams </span> <span class="menu-arrow"></span></a>
                         <ul>
                            <li><a href="{% url 'exam_list' %}">Scheduling</a></li>
-                           <li><a href="{% url 'result_list' %}">Results</a></li>
-                        </ul>
+                           l>
                      </li>
                      {% endif %}
 
@@ -156,15 +177,23 @@
                      <li>
                         <a href="{% url 'timetable' %}"><i class="fas fa-clock"></i> <span>Timetable</span></a>
                      </li>
-                     
-                     <li class="mt-4">
-                        <a href="{% url 'logout' %}" class="text-danger"><i class="fas fa-power-off"></i> <span>Logout</span></a>
-                     </li>
                   </ul>
                </div>
+
+      <!-- ZONE 2 : LE LOGOUT (Fixe tout en bas) -->
+               <div class="sidebar-menu sidebar-logout-container">
+                  <ul>
+                     <li>
+                        <a href="{% url 'logout' %}" class="text-danger">
+                           <i class="fas fa-power-off"></i> <span>Logout</span>
+                        </a>
+                     /li>
+                  </ul>
+               </div>
+
             </div>
          </div>
-         <!-- SIDEBAR END -->
+<!-- SIDEBAR END -->
 
          <!-- MAIN CONTENT AREA -->
          <div class="page-wrapper">
