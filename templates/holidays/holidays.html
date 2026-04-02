@@ -1,73 +1,93 @@
 {% extends 'Home/base.html' %}
 {% load static %}
+
 {% block body %}
-<div class="page-wrapper">
-  <div class="content container-fluid">
-    <div class="page-header">
-      <div class="row align-items-center">
+<!-- PAGE HEADER -->
+<div class="page-header">
+    <div class="row align-items-center">
         <div class="col">
-          <h3 class="page-title">Jours Fériés</h3>
-          <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-            <li class="breadcrumb-item active">Jours Fériés</li>
-          </ul>
+            <h3 class="page-title" style="font-weight: 700; color: #1e293b;">Jours Fériés</h3>
+            <ul class="breadcrumb" style="background: transparent; padding: 0;">
+                <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li class="breadcrumb-item active">Liste des Jours Fériés</li>
+            </ul>
         </div>
         <div class="col-auto text-right float-right ml-auto">
-          <a href="{% url 'add_holiday' %}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Ajouter
-          </a>
+            <a href="{% url 'add_holiday' %}" class="btn btn-primary" style="border-radius: 8px; padding: 10px 20px; font-weight: 500; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);">
+                <i class="fas fa-plus mr-2"></i> Ajouter un jour
+            </a>
         </div>
-      </div>
     </div>
+</div>
 
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-success">{{ message }}</div>
-      {% endfor %}
-    {% endif %}
+<!-- MESSAGES -->
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success border-0 shadow-sm" role="alert" style="border-left: 5px solid #10b981;">
+        <i class="fas fa-check-circle mr-2"></i> {{ message }}
+    </div>
+    {% endfor %}
+{% endif %}
 
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="card card-table">
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-hover table-center mb-0 datatable">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Nom du jour férié</th>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th class="text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for holiday in holidays %}
-                  <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ holiday.name }}</td>
-                    <td>{{ holiday.date|date:"d M Y" }}</td>
-                    <td>{{ holiday.description|default:"-" }}</td>
-                    <td class="text-right">
-                      <form action="{% url 'delete_holiday' holiday.pk %}" method="POST" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm bg-danger-light"
-                          onclick="return confirm('Supprimer ce jour férié ?');">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </form>
-                    </td>
-                  </tr>
-                  {% empty %}
-                  <tr><td colspan="5" class="text-center">Aucun jour férié trouvé.</td></tr>
-                  {% endfor %}
-                </tbody>
-              </table>
+<!-- HOLIDAY TABLE CARD -->
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card shadow-sm border-0" style="border-radius: 12px; overflow: hidden;">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-center mb-0" style="border-collapse: separate;">
+                        <thead style="background-color: #f8fafc;">
+                            <tr>
+                                <th class="py-3 px-4" style="color: #64748b; font-weight: 600; font-size: 13px;">#</th>
+                                <th class="py-3" style="color: #64748b; font-weight: 600; font-size: 13px;">NOM DU JOUR FÉRIÉ</th>
+                                <th class="py-3" style="color: #64748b; font-weight: 600; font-size: 13px;">DATE</th>
+                                <th class="py-3" style="color: #64748b; font-weight: 600; font-size: 13px;">DESCRIPTION</th>
+                                <th class="py-3 px-4 text-right" style="color: #64748b; font-weight: 600; font-size: 13px;">ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for holiday in holidays %}
+                            <tr style="transition: 0.2s;">
+                                <td class="px-4 text-muted">{{ forloop.counter }}</td>
+                                <td>
+                                    <span style="font-weight: 600; color: #334155;">{{ holiday.name }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-soft-primary" style="padding: 6px 12px; border-radius: 6px; background-color: #e0e7ff; color: #4338ca;">
+                                        <i class="far fa-calendar-alt mr-1"></i> {{ holiday.date|date:"d M Y" }}
+                                    </span>
+                                </td>
+                                <td class="text-muted">{{ holiday.description|default:"Aucune description" }}</td>
+                                <td class="text-right px-4">
+                                    <div class="actions">
+                                        <form action="{% url 'delete_holiday' holiday.pk %}" method="POST" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm" 
+                                                style="background-color: #fee2e2; color: #dc2626; border: none; border-radius: 6px; width: 32px; height: 32px; padding: 0;"
+                                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce jour férié ?');"
+                                                title="Supprimer">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <div class="mb-3">
+                                        <i class="fas fa-calendar-times fa-3x text-light"></i>
+                                    </div>
+                                    <h5 class="text-muted">Aucun jour férié trouvé</h5>
+                                    <p class="text-muted small">Commencez par ajouter un jour férié pour qu'il apparaisse ici.</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 {% endblock %}

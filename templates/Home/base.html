@@ -2,257 +2,200 @@
 
 <!DOCTYPE html>
 <html lang="en">
-   
    <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-      <title>Preskool - Dashboard</title>
-      <link rel="shortcut icon" href="{%static 'assets/img/favicon.png' %}">
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;1,400&amp;display=swap">
-      <link rel="stylesheet" href="{%static 'assets/plugins/bootstrap/css/bootstrap.min.css' %}">
-      <link rel="stylesheet" href="{%static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}">
-      <link rel="stylesheet" href="{%static 'assets/plugins/fontawesome/css/all.min.css' %}">
-      <link rel="stylesheet" href="{%static 'assets/css/style.css' %}">
+      <title>PFM - School Management</title>
+      <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}">
+      
+      <!-- Modern Fonts -->
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+      
+      <link rel="stylesheet" href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css' %}">
+      <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}">
+      <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}">
+      <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+
+      <!-- CUSTOM MODERN UI STYLES (Safe to edit) -->
+      <style>
+         :root {
+            --sidebar-bg: #1e293b; /* Dark Slate */
+            --primary-accent: #4f46e5; /* Indigo */
+         }
+         body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+         .header { background: #ffffff; border-bottom: 1px solid #e2e8f0; }
+         .sidebar { background-color: var(--sidebar-bg) !important; }
+         .sidebar-menu li a { color: #94a3b8 !important; border-radius: 8px; margin: 2px 10px; transition: 0.3s; }
+         .sidebar-menu li a:hover { background: rgba(255,255,255,0.05) !important; color: #fff !important; }
+         .sidebar-menu li.active a { background: var(--primary-accent) !important; color: #fff !important; }
+         .menu-title span { color: #64748b !important; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
+         .page-wrapper { padding: 25px; transition: all 0.2s ease-in-out; }
+         .user-img img { border: 2px solid #e2e8f0; }
+      </style>
    </head>
+
    <body>
       <div class="main-wrapper">
+         
+         <!-- HEADER START -->
          <div class="header">
             <div class="header-left">
-               <!--<a href="index.html" class="logo">-->
                <a href="{% url 'dashboard' %}" class="logo">
-               <img src="{%static 'assets/img/logo.png' %}" alt="Logo">
+                  <img src="{% static 'assets/img/logo.png' %}" alt="Logo" style="max-height: 45px;">
                </a>
-               <!--<a href="index.html" class="logo logo-small">-->
                <a href="{% url 'dashboard' %}" class="logo logo-small">
-               <img src="{%static 'assets/img/logo-small.png' %}" alt="Logo" width="30" height="30">
+                  <img src="{% static 'assets/img/logo-small.png' %}" alt="Logo" width="30" height="30">
                </a>
             </div>
+            
             <a href="javascript:void(0);" id="toggle_btn">
-            <i class="fas fa-align-left"></i>
+               <i class="fas fa-align-left"></i>
             </a>
+
             <div class="top-nav-search">
                <form>
-                  <input type="text" class="form-control" placeholder="Search here">
+                  <input type="text" class="form-control" placeholder="Search students, staff...">
                   <button class="btn" type="submit"><i class="fas fa-search"></i></button>
                </form>
             </div>
+
             <a class="mobile_btn" id="mobile_btn">
-            <i class="fas fa-bars"></i>
+               <i class="fas fa-bars"></i>
             </a>
+
             <ul class="nav user-menu">
-               <li class="nav-item dropdown noti-dropdown">
-                  <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                   {% comment %} {% if unread_notification_count > 0 %}
-                  <i class="far fa-bell"></i> <span class="badge badge-pill">{{unread_notification_count}}</span>
-                  {% endif %} {% endcomment %}
-                  </a>
-                  <div class="dropdown-menu notifications">
-                     <div class="topnav-dropdown-header">
-                        <span class="notification-title">Notifications</span>
-                        <a href="javascript:void(0)" class="clear-noti"> Clear All </a>
-                     </div>
-                     <div class="noti-content">
-                        <ul class="notification-list">
-                           
-                        </ul>
-                     </div>
-                     <div class="topnav-dropdown-footer">
-                        <a href="#">View all Notifications</a>
-                     </div>
-                  </div>
-               </li>
+               <!-- User Dropdown -->
                <li class="nav-item dropdown has-arrow">
                   <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                  <span class="user-img"><img class="rounded-circle" src="{%static 'assets/img/profiles/avatar-01.jpg'%}" width="31" alt="Ryan Taylor"></span>
+                     <span class="user-img">
+                        <img class="rounded-circle" src="{% static 'assets/img/profiles/avatar-01.jpg' %}" width="31" alt="User">
+                        <span class="ml-2 d-none d-lg-inline-block" style="font-weight: 500; color: #334155;">
+                           {{ request.user.username|capfirst }}
+                        </span>
+                     </span>
                   </a>
                   <div class="dropdown-menu">
                      <div class="user-header">
                         <div class="avatar avatar-sm">
-                           <img src="{%static 'assets/img/profiles/avatar-01.jpg'%}" alt="User Image" class="avatar-img rounded-circle">
+                           <img src="{% static 'assets/img/profiles/avatar-01.jpg' %}" alt="User" class="avatar-img rounded-circle">
                         </div>
                         <div class="user-text">
-                           {% comment %} <h6>{{user.username}}</h6> {% endcomment %}
-                           <p class="text-muted mb-0">Administrator</p>
+                           <h6>{{ request.user.username }}</h6>
+                           <p class="text-muted mb-0" style="font-size: 12px;">
+                              {% if request.user.is_admin %}Administrator
+                              {% elif request.user.is_teacher %}Teacher
+                              {% else %}Student{% endif %}
+                           </p>
                         </div>
                      </div>
-                     <!--<a class="dropdown-item" href="profile.html">My Profile</a>
-                     <a class="dropdown-item" href="inbox.html">Inbox</a>
-                     <a class="dropdown-item" href="">Logout</a>
-                     -->
-                     <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
-                     <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                     <a class="dropdown-item" href="{% url 'profile' %}"><i class="far fa-user-circle mr-2"></i> My Profile</a>
+                     <hr class="my-1">
+                     <a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a>
                   </div>
                </li>
             </ul>
          </div>
+         <!-- HEADER END -->
+
+         <!-- SIDEBAR START -->
          <div class="sidebar" id="sidebar">
             <div class="sidebar-inner slimscroll">
                <div id="sidebar-menu" class="sidebar-menu">
                   <ul>
-                     <li class="menu-title">
-                        <span>Main Menu</span>
-                     </li>
-                     <li class="submenu">
-                        <a href="#"><i class="fas fa-tachometer-alt"></i> <span> Dashboard</span> <span class="menu-arrow"></span></a>
-                        <ul>
-                           {% if request.user.is_admin %}
-                           <li><a href="{% url 'dashboard' %}">Admin Dashboard</a></li>
-                           {% elif request.user.is_teacher %}
-                           <li><a href="{% url 'dashboard' %}">Teacher Dashboard</a></li>
-                           {% elif request.user.is_student %}
-                           <li><a href="{% url 'dashboard' %}">Student Dashboard</a></li>
-                           {% else %}
-                           <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                           {% endif %}
-                        </ul>
+                     <li class="menu-title"><span>Main</span></li>
+                     <li>
+                        <a href="{% url 'dashboard' %}"><i class="fas fa-th-large"></i> <span>Dashboard</span></a>
                      </li>
 
-                     <li class="menu-title">
-                        <span>Management</span>
-                     </li>
+                     <li class="menu-title"><span>Management</span></li>
 
-                     <!-- SEUL L'ADMIN PEUT VOIR "Students", "Teachers", "Departments" -->
                      {% if request.user.is_admin %}
                      <li class="submenu">
                         <a href="#"><i class="fas fa-user-graduate"></i> <span> Students</span> <span class="menu-arrow"></span></a>
                         <ul>
                            <li><a href="{% url 'student_list' %}">Student List</a></li>
-                           <li><a href="{% url 'add_student' %}">Student Add</a></li>
+                           <li><a href="{% url 'add_student' %}">Add Student</a></li>
                         </ul>
                      </li>
                      <li class="submenu">
                         <a href="#"><i class="fas fa-chalkboard-teacher"></i> <span> Teachers</span> <span class="menu-arrow"></span></a>
                         <ul>
                            <li><a href="{% url 'teacher_list' %}">Teacher List</a></li>
-                           <li><a href="{% url 'add_teacher' %}">Teacher Add</a></li>
+                           <li><a href="{% url 'add_teacher' %}">Add Teacher</a></li>
                         </ul>
                      </li>
                      <li class="submenu">
                         <a href="#"><i class="fas fa-building"></i> <span> Departments</span> <span class="menu-arrow"></span></a>
                         <ul>
                            <li><a href="{% url 'department_list' %}">Department List</a></li>
-                           <li><a href="{% url 'add_department' %}">Department Add</a></li>
+                           <li><a href="{% url 'add_department' %}">Add Department</a></li>
                         </ul>
                      </li>
                      {% endif %}
 
-                     <!-- L'ADMIN ET LE PROF PEUVENT VOIR LES EXAMENS ET LES MATIÈRES -->
                      {% if request.user.is_admin or request.user.is_teacher %}
                      <li class="submenu">
-                        <a href="#"><i class="fas fa-book"></i> <span> Subjects </span> <span class="menu-arrow"></span></a>
+                        <a href="#"><i class="fas fa-book-open"></i> <span> Subjects </span> <span class="menu-arrow"></span></a>
                         <ul>
-                           <li><a href="{% url 'subject_list' %}">Liste des matières</a></li>
-                           <li><a href="{% url 'add_subject' %}">Ajouter une matière</a></li>
+                           <li><a href="{% url 'subject_list' %}">List Subjects</a></li>
+                           <li><a href="{% url 'add_subject' %}">Add Subject</a></li>
                         </ul>
                      </li>
                      <li class="submenu">
-                        <a href="#"><i class="fas fa-clipboard-list"></i> <span> Examens </span> <span class="menu-arrow"></span></a>
+                        <a href="#"><i class="fas fa-file-signature"></i> <span> Exams </span> <span class="menu-arrow"></span></a>
                         <ul>
-                           <li><a href="{% url 'exam_list' %}">Planification</a></li>
-                           <li><a href="{% url 'result_list' %}">Résultats (Notes)</a></li>
+                           <li><a href="{% url 'exam_list' %}">Scheduling</a></li>
+                           <li><a href="{% url 'result_list' %}">Results</a></li>
                         </ul>
                      </li>
                      {% endif %}
 
-                     <!-- TOUT LE MONDE PEUT VOIR ÇA -->
                      <li>
-                        <a href="{% url 'holiday_list' %}"><i class="fas fa-holly-berry"></i> <span>Jours Fériés</span></a>
+                        <a href="{% url 'holiday_list' %}"><i class="fas fa-calendar-day"></i> <span>Holidays</span></a>
                      </li>
                      <li>
-                        <a href="{% url 'timetable' %}"><i class="fas fa-table"></i> <span>Emploi du Temps</span></a>
+                        <a href="{% url 'timetable' %}"><i class="fas fa-clock"></i> <span>Timetable</span></a>
                      </li>
                      
-                     <!-- LOGOUT -->
-                     <li>
-                        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> <span>Déconnexion</span></a>
+                     <li class="mt-4">
+                        <a href="{% url 'logout' %}" class="text-danger"><i class="fas fa-power-off"></i> <span>Logout</span></a>
                      </li>
                   </ul>
                </div>
+            </div>
+         </div>
+         <!-- SIDEBAR END -->
 
+         <!-- MAIN CONTENT AREA -->
+         <div class="page-wrapper">
+            <div class="content container-fluid">
+               {% block body %}
+                  <!-- Individual pages load here -->
+               {% endblock %}
             </div>
          </div>
 
-
-         {% block body %}
-            
-         {% endblock %}
-
       </div>
 
- 
-
-    
+      <!-- Scripts -->
       <script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
       <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
       <script src="{% static 'assets/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
       <script src="{% static 'assets/js/script.js' %}"></script>
  
+      <!-- Notification Script -->
       <script type="text/javascript">
           document.addEventListener('DOMContentLoaded', function() {
-              // Select the notification dropdown element
               const notiDropdown = document.querySelector('.noti-dropdown');
-              const clearAllBtn = document.querySelector('.clear-noti');
-      
               if (notiDropdown) {
-                  // Add a click event listener to the notification dropdown
                   notiDropdown.addEventListener('click', function() {
-                      const url = "";
-      
-                      // Use the Fetch API to send a POST request to mark notifications as read
-                      fetch(url, {
+                      fetch("", {
                           method: 'POST',
-                          headers: {
-                              'X-CSRFToken': '{{ csrf_token }}',
-                              'Content-Type': 'application/x-www-form-urlencoded',
-                          }
-                      })
-                      .then(response => response.json())  // Parse the JSON response
-                      .then(data => {
-                          if (data.status === 'success') {
-                              // Remove the badge if notifications are successfully marked as read
-                              const badge = document.querySelector('.badge');
-                              if (badge) {
-                                  badge.remove();
-                              }
-                          }
-                      })
-                      .catch(error => {
-                          console.error('Error:', error);  // Log any errors
-                      });
-                  });
-              }
-      
-              if (clearAllBtn) {
-                  // Add a click event listener to the "Clear All" button
-                  clearAllBtn.addEventListener('click', function() {
-                      const clearUrl = "";  // Ensure this URL points to the correct view
-      
-                      // Use Fetch to send a POST request to clear all notifications
-                      fetch(clearUrl, {
-                          method: 'POST',
-                          headers: {
-                              'X-CSRFToken': '{{ csrf_token }}',
-                              'Content-Type': 'application/x-www-form-urlencoded',
-                          }
-                      })
-                      .then(response => response.json())  // Parse the JSON response
-                      .then(data => {
-                          if (data.status === 'success') {
-                              // Clear all notifications from the dropdown
-                              const notificationList = document.querySelector('.notification-list');
-                              if (notificationList) {
-                                  notificationList.innerHTML = '<li>No new notifications</li>';  // Optionally show a "No new notifications" message
-                              }
-                          }
-                      })
-                      .catch(error => {
-                          console.error('Error:', error);  // Log any errors
+                          headers: { 'X-CSRFToken': '{{ csrf_token }}' }
                       });
                   });
               }
           });
       </script>
-      
-      
-  </body>
-  </html>
+   </body>
+</html>
