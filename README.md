@@ -135,10 +135,12 @@ PFM__Python/
 │   └── manage.py           # CLI Django
 ├── requirements.txt        # Dépendances du projet
 └── README.md               # Documentation principale
+```
+---
 
 ##🎥 Démonstration Vidéo
 
-[demo.webm](https://github.com/user-attachments/assets/e6c94e1e-59ef-46aa-9f23-38a64d6b9042)
+https://github.com/user-attachments/assets/e6c94e1e-59ef-46aa-9f23-38a64d6b9042
 
 
 
