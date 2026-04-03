@@ -107,9 +107,9 @@ Le système utilise un modèle **RBAC (Role-Based Access Control)**. Voici les c
 
 | Rôle | Email / Login | Mot de passe |
 | :--- | :--- | :--- |
-| **Administrateur** | `admin@preskool.com` | `admin123` |
-| **Enseignant** | `teacher@teacher.com` | `teacher123` |
-| **Étudiant** | `student@student.com` | `student123` |
+| **Administrateur** | `admin@gmail.com` | `admin` |
+| **Enseignant** | `teacher@gmail.com` | `teacher` |
+| **Étudiant** | `student@gmail.com` | `student` |
 
 ---
 
